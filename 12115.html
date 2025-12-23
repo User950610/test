@@ -3,9 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>iStore Select | iPhone 11-17 全系列</title>
+    <title>iStore | iPhone 17 & More</title>
     <style>
-        /* --- 蘋果精品風格配色 --- */
         :root {
             --bg-gray: #F5F5F7;
             --text-black: #1D1D1F;
@@ -14,176 +13,211 @@
             --white: #FFFFFF;
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: "SF Pro Display", "Helvetica Neue", "Microsoft JhengHei", sans-serif; }
-        body { background-color: var(--white); color: var(--text-black); line-height: 1.5; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: "SF Pro Display", "Helvetica Neue", sans-serif; }
+        body { background-color: var(--white); color: var(--text-black); overflow-x: hidden; }
 
+        /* 導覽列 */
         header {
-            background: rgba(255, 255, 255, 0.8);
-            backdrop-filter: blur(20px);
-            padding: 15px 50px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 1px solid #d2d2d7;
+            background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(20px);
+            padding: 15px 50px; display: flex; justify-content: space-between;
+            align-items: center; border-bottom: 1px solid #d2d2d7;
             position: sticky; top: 0; z-index: 1000;
         }
-        .logo { font-size: 20px; font-weight: 600; letter-spacing: -0.5px; cursor: pointer; }
-        .nav-links span { margin-left: 25px; cursor: pointer; color: var(--text-black); font-size: 14px; transition: 0.3s; }
+        .logo { font-size: 20px; font-weight: 600; cursor: pointer; }
+        .nav-links span { margin-left: 25px; cursor: pointer; font-size: 14px; transition: 0.3s; }
         .nav-links span.active { color: var(--apple-blue); font-weight: 600; }
 
-        .container { display: flex; max-width: 1200px; margin: 50px auto; padding: 0 20px; }
+        /* 首頁 Banner */
+        #home-page { text-align: center; padding: 120px 20px; background: var(--bg-gray); transition: 0.5s; }
+        .hero-title { font-size: 64px; font-weight: 600; margin-bottom: 15px; letter-spacing: -1px; }
+        .hero-subtitle { font-size: 24px; color: var(--text-gray); margin-bottom: 40px; }
+        .hero-btn { 
+            background: var(--apple-blue); color: white; padding: 12px 35px; 
+            border-radius: 30px; text-decoration: none; font-weight: 500; cursor: pointer; border: none; font-size: 16px;
+        }
 
-        /* 左側選單 */
+        /* 商店容器 */
+        .container { display: flex; max-width: 1200px; margin: 50px auto; padding: 0 20px; min-height: 600px; }
         aside { width: 220px; flex-shrink: 0; }
-        aside h3 { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-gray); margin-bottom: 25px; }
+        aside h3 { font-size: 14px; color: var(--text-gray); margin-bottom: 25px; text-transform: uppercase; letter-spacing: 1px; }
         aside ul { list-style: none; }
-        aside li { margin-bottom: 18px; color: var(--text-black); cursor: pointer; font-size: 15px; transition: 0.2s; }
+        aside li { margin-bottom: 18px; cursor: pointer; font-size: 15px; transition: 0.2s; }
         aside li:hover { color: var(--apple-blue); }
 
-        /* 右側商品區 */
         main { flex-grow: 1; margin-left: 60px; }
         .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 40px; }
-
+        
+        /* 商品卡片 */
         .product-card {
-            background: var(--bg-gray); padding: 30px; border-radius: 18px;
-            transition: all 0.4s ease; text-align: center; border: 1px solid transparent;
+            background: var(--bg-gray); padding: 40px 20px; border-radius: 18px; text-align: center;
+            transition: 0.4s ease; cursor: pointer;
         }
-        .product-card:hover { 
-            background: var(--white); transform: scale(1.02);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.08); border: 1px solid #d2d2d7;
+        .product-card:hover { transform: translateY(-10px); background: #eee; box-shadow: 0 20px 40px rgba(0,0,0,0.05); }
+        .product-img { font-size: 60px; margin-bottom: 20px; display: block; }
+        .product-name { font-size: 18px; font-weight: 600; margin-bottom: 10px; }
+        .product-price-label { font-size: 14px; color: var(--text-gray); }
+
+        /* 彈窗 Modal */
+        .modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6); z-index: 2000; justify-content: center; align-items: center;
+            backdrop-filter: blur(5px);
         }
-        .product-img { font-size: 50px; margin-bottom: 20px; display: block; }
-        .product-name { font-size: 17px; font-weight: 600; margin-bottom: 10px; height: 50px; }
+        .modal-content {
+            background: white; padding: 50px; border-radius: 30px; max-width: 800px; width: 90%;
+            position: relative; display: flex; gap: 40px; align-items: center;
+        }
+        .close-btn { position: absolute; top: 25px; right: 30px; cursor: pointer; font-size: 28px; color: var(--text-gray); }
+        .modal-info { flex: 1; }
+        .modal-info h2 { font-size: 32px; margin-bottom: 15px; }
+        .modal-desc { color: var(--text-gray); margin-bottom: 25px; line-height: 1.6; }
         
-        /* 規格下拉選單 */
+        .spec-label { font-size: 14px; font-weight: 600; margin-bottom: 10px; display: block; }
         .spec-select {
-            width: 100%; padding: 8px; border-radius: 8px; border: 1px solid #d2d2d7;
-            background: white; margin-bottom: 15px; font-size: 14px; outline: none;
+            width: 100%; padding: 12px; border-radius: 12px; border: 1px solid #d2d2d7;
+            font-size: 16px; margin-bottom: 30px; outline: none; appearance: none;
+            background: url('data:image/svg+xml;charset=US-ASCII,<svg%20xmlns%3D"http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg"%20width%3D"24"%20height%3D"24"%20viewBox%3D"0%200%2024%2024"><path%20fill%3D"gray"%20d%3D"M7%2010l5%205%205-5z"%2F><%2Fsvg>') no-repeat right 10px center;
         }
 
-        .product-price { font-size: 16px; font-weight: 500; color: var(--text-black); }
-        
-        .add-btn {
-            margin-top: 20px; padding: 10px 20px; background: var(--apple-blue);
-            color: white; border: none; border-radius: 20px;
-            cursor: pointer; font-size: 13px; width: 100%;
-        }
+        .hidden { display: none !important; }
     </style>
 </head>
 <body>
 
     <header>
-        <div class="logo" onclick="location.reload()">iStore Select</div>
+        <div class="logo" onclick="showHome()">iStore Select</div>
         <div class="nav-links">
-            <span id="nav-iphone" class="active" onclick="switchPage('iPhone')">iPhone</span>
+            <span id="nav-home" class="active" onclick="showHome()">首頁</span>
+            <span id="nav-iphone" onclick="switchPage('iPhone')">iPhone</span>
             <span id="nav-acc" onclick="switchPage('配件')">周邊配件</span>
-            <span>購物車 (<span id="cart-count">0</span>)</span>
+            <span style="font-weight: 600;">🛒 (<span id="cart-count">0</span>)</span>
         </div>
     </header>
 
-    <div class="container">
-        <aside id="sidebar"></aside>
+    <section id="home-page">
+        <h1 class="hero-title">iPhone 17 Pro</h1>
+        <p class="hero-subtitle">鈦金屬，強大登場。</p>
+        <button class="hero-btn" onclick="switchPage('iPhone')">立即選購</button>
+    </section>
 
+    <div id="shop-container" class="container hidden">
+        <aside id="sidebar"></aside>
         <main>
             <div class="product-grid" id="product-list"></div>
         </main>
     </div>
 
+    <div id="product-modal" class="modal" onclick="closeModal()">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <span class="close-btn" onclick="closeModal()">×</span>
+            <div id="modal-img" style="font-size: 120px; flex: 0 0 200px; text-align: center;">📱</div>
+            <div class="modal-info">
+                <h2 id="modal-name">產品名稱</h2>
+                <p id="modal-desc" class="modal-desc">產品詳細描述</p>
+                
+                <label class="spec-label">選擇儲存容量</label>
+                <select id="modal-spec-select" class="spec-select" onchange="updateModalPrice()"></select>
+
+                <div id="modal-price" style="font-size: 24px; font-weight: 600; margin-bottom: 30px;">NT$0</div>
+                <button class="hero-btn" style="width: 100%;" onclick="addToCart();">加入購物車</button>
+            </div>
+        </div>
+    </div>
+
     <script>
-        // 1. 資料庫
+        // 1. 資料庫 (i11 - i17 與配件)
         const db = {
             iphone: [
-                { id: 171, name: "iPhone 17 Pro Max", series: "iPhone 17", colors: ["#000", "#e3e3e3"], specs: [ {gb: "256GB", price: 44900}, {gb: "1TB", price: 58900} ] },
-                { id: 172, name: "iPhone 17 Pro", series: "iPhone 17", colors: ["#000", "#5b6d80"], specs: [ {gb: "128GB", price: 36900}, {gb: "512GB", price: 43900} ] },
-                { id: 173, name: "iPhone 17", series: "iPhone 17", colors: ["#000", "#90ee90"], specs: [ {gb: "128GB", price: 29900}, {gb: "256GB", price: 33400} ] },
-                { id: 161, name: "iPhone 16 Pro", series: "iPhone 16", colors: ["#c5b2a0", "#000"], specs: [ {gb: "128GB", price: 36900} ] },
-                { id: 151, name: "iPhone 15 Pro", series: "iPhone 15", colors: ["#000"], specs: [ {gb: "128GB", price: 32900} ] },
-                { id: 111, name: "iPhone 11", series: "iPhone 11", colors: ["#e0b0ff", "#fff"], specs: [ {gb: "64GB", price: 13900}, {gb: "128GB", price: 15500} ] }
+                { id: 171, name: "iPhone 17 Pro Max", series: "iPhone 17", desc: "全新鈦金屬設計，配備 A19 Pro 晶片，支援最強大的相機系統。", specs: [{gb: "256GB", price: 44900}, {gb: "512GB", price: 51900}, {gb: "1TB", price: 58900}] },
+                { id: 172, name: "iPhone 17 Pro", series: "iPhone 17", desc: "Pro 級效能，完美平衡的大小與手感。", specs: [{gb: "128GB", price: 36900}, {gb: "256GB", price: 40400}, {gb: "512GB", price: 47400}] },
+                { id: 161, name: "iPhone 16 Pro", series: "iPhone 16", desc: "卓越的影片拍攝能力，沙漠鈦金屬色登場。", specs: [{gb: "128GB", price: 36900}, {gb: "256GB", price: 40400}] },
+                { id: 111, name: "iPhone 11", series: "iPhone 11", desc: "經典超廣角雙鏡頭，依然強大超值。", specs: [{gb: "64GB", price: 13900}, {gb: "128GB", price: 15500}] }
             ],
             accessories: [
-                { id: 201, name: "MagSafe 充電器", price: 1290, type: "power" },
-                { id: 202, name: "USB-C 充電線", price: 590, type: "cable" },
-                { id: 203, name: "AirPods Pro", price: 7490, type: "audio" }
+                { id: 201, name: "MagSafe 充電器", type: "power", desc: "磁吸對位，無線充電快如閃電。", specs: [{gb: "標準規格", price: 1290}] },
+                { id: 203, name: "AirPods Pro (第2代)", type: "audio", desc: "主動式降噪，打造沉浸式聆聽體驗。", specs: [{gb: "USB-C 版", price: 7490}] }
             ]
         };
 
-        let currentPage = 'iPhone'; // 當前頁面狀態
+        // 2. 切換首頁與商店
+        function showHome() {
+            document.getElementById('home-page').classList.remove('hidden');
+            document.getElementById('shop-container').classList.add('hidden');
+            setActiveNav('nav-home');
+        }
 
-        // 2. 切換頁面函式
         function switchPage(page) {
-            currentPage = page;
-            document.getElementById('nav-iphone').classList.toggle('active', page === 'iPhone');
-            document.getElementById('nav-acc').classList.toggle('active', page === '配件');
-            renderSidebar();
-            renderProducts('全部');
+            document.getElementById('home-page').classList.add('hidden');
+            document.getElementById('shop-container').classList.remove('hidden');
+            setActiveNav(page === 'iPhone' ? 'nav-iphone' : 'nav-acc');
+            renderSidebar(page);
+            renderProducts(page, '全部');
+        }
+
+        function setActiveNav(id) {
+            document.querySelectorAll('.nav-links span').forEach(s => s.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
         }
 
         // 3. 渲染側邊欄
-        function renderSidebar() {
+        function renderSidebar(page) {
             const sidebar = document.getElementById('sidebar');
-            if (currentPage === 'iPhone') {
-                const seriesList = ["iPhone 17", "iPhone 16", "iPhone 15", "iPhone 11"];
-                sidebar.innerHTML = `
-                    <h3>歷代機型</h3>
-                    <ul>
-                        <li onclick="renderProducts('全部')">所有 iPhone</li>
-                        ${seriesList.map(s => `<li onclick="renderProducts('${s}')">${s} 系列</li>`).join('')}
-                    </ul>`;
+            if (page === 'iPhone') {
+                const series = ["iPhone 17", "iPhone 16", "iPhone 11"];
+                sidebar.innerHTML = `<h3>歷代機型</h3><ul><li onclick="renderProducts('iPhone', '全部')">所有 iPhone</li>${series.map(s => `<li onclick="renderProducts('iPhone', '${s}')">${s} 系列</li>`).join('')}</ul>`;
             } else {
-                sidebar.innerHTML = `
-                    <h3>配件類別</h3>
-                    <ul>
-                        <li onclick="renderProducts('全部')">全部配件</li>
-                        <li onclick="renderProducts('power')">電源</li>
-                        <li onclick="renderProducts('cable')">線材</li>
-                        <li onclick="renderProducts('audio')">音訊</li>
-                    </ul>`;
+                sidebar.innerHTML = `<h3>類別</h3><ul><li onclick="renderProducts('配件', '全部')">全部配件</li><li onclick="renderProducts('配件', 'power')">電源</li><li onclick="renderProducts('配件', 'audio')">音訊</li></ul>`;
             }
         }
 
-        // 4. 渲染商品
-        function renderProducts(filter = '全部') {
+        // 4. 渲染商品清單
+        function renderProducts(page, filter) {
             const list = document.getElementById('product-list');
-            let data = currentPage === 'iPhone' ? db.iphone : db.accessories;
-
+            let data = page === 'iPhone' ? db.iphone : db.accessories;
             if (filter !== '全部') {
                 data = data.filter(p => p.series === filter || p.type === filter);
             }
-
             list.innerHTML = data.map(p => `
-                <div class="product-card">
-                    <span class="product-img">${currentPage === 'iPhone' ? '📱' : '🔌'}</span>
+                <div class="product-card" onclick="openModal(${p.id}, '${page}')">
+                    <span class="product-img">${page === 'iPhone' ? '📱' : '🔌'}</span>
                     <div class="product-name">${p.name}</div>
-                    
-                    <div style="margin: 10px 0;">
-                        ${p.colors ? p.colors.map(c => `<span style="display:inline-block; width:12px; height:12px; border-radius:50%; background:${c}; margin:0 3px; border:1px solid #ddd;"></span>`).join('') : ''}
-                    </div>
-
-                    <select class="spec-select" onchange="updatePrice(this, ${p.id})">
-                        ${p.specs ? p.specs.map(s => `<option value="${s.price}">${s.gb}</option>`).join('') : `<option value="${p.price}">標準規格</option>`}
-                    </select>
-
-                    <div class="product-price" id="price-${p.id}">
-                        NT$${(p.specs ? p.specs[0].price : p.price).toLocaleString()}
-                    </div>
-                    
-                    <button class="add-btn" onclick="addToCart()">加入購物車</button>
+                    <div class="product-price-label">起價 NT$${p.specs[0].price.toLocaleString()}</div>
                 </div>
             `).join('');
         }
 
-        function updatePrice(selectElement, productId) {
-            const priceDisplay = document.getElementById(`price-${productId}`);
-            priceDisplay.innerText = `NT$${parseInt(selectElement.value).toLocaleString()}`;
+        // 5. 彈窗邏輯 (容量與價格連動)
+        function openModal(id, page) {
+            const data = page === 'iPhone' ? db.iphone : db.accessories;
+            const p = data.find(item => item.id === id);
+            
+            document.getElementById('modal-name').innerText = p.name;
+            document.getElementById('modal-desc').innerText = p.desc;
+            document.getElementById('modal-img').innerText = page === 'iPhone' ? '📱' : '🔌';
+            
+            // 填充容量選項
+            const select = document.getElementById('modal-spec-select');
+            select.innerHTML = p.specs.map(s => `<option value="${s.price}">${s.gb}</option>`).join('');
+            
+            updateModalPrice();
+            document.getElementById('product-modal').style.display = 'flex';
         }
+
+        function updateModalPrice() {
+            const price = parseInt(document.getElementById('modal-spec-select').value);
+            document.getElementById('modal-price').innerText = "NT$ " + price.toLocaleString();
+        }
+
+        function closeModal() { document.getElementById('product-modal').style.display = 'none'; }
 
         function addToCart() {
             const count = document.getElementById('cart-count');
             count.innerText = parseInt(count.innerText) + 1;
+            alert("已成功加入購物車！");
+            closeModal();
         }
 
-        // 初始化
-        switchPage('iPhone');
+        showHome(); // 初始顯示首頁
     </script>
 </body>
 </html>
